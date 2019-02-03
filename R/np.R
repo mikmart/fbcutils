@@ -10,14 +10,14 @@
 #'
 #' @export
 np <- function(df, x, ...) {
-  count_var <- enquo(x)
-  group_var <- quos(...)
+  quo_x <- enquo(x)
+  grps <- groups(df)
 
   df %>%
-    group_by(!!!group_var) %>%
-    count(!!count_var) %>%
+    group_by(..., add = TRUE) %>%
+    count(!!quo_x) %>%
     mutate(p = n / sum(n), n_ryhma = sum(n)) %>%
-    ungroup()
+    group_by(!!!grps)
 }
 
 #' Create an np table and display it with gt
